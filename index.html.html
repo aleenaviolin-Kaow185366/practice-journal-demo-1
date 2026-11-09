@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Journal</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async defer></script>
+<style>
+:root{--bg:#4d43b5;--card:#f5f2e9;--ink:#141414;--muted:#6f685c;--accent:#e0201b;--line:#d6cfbd;
+  --sage:#a8c3b2;--tan:#c9a98a;--yellow:#ebe98e;--purple:#8577ea;--deep:#6b58d6}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Helvetica Neue",Inter,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+button,select,input,textarea{font:inherit}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+h1,h2,h3{margin:.2em 0;font-weight:800;letter-spacing:-0.02em}
+h2{font-size:22px;line-height:1.15}
+
+/* ---------- welcome / login ---------- */
+.login-wrap{min-height:100vh;padding:24px 16px;display:flex;align-items:center;justify-content:center}
+.lg-screen{position:relative;width:370px;max-width:100%;height:740px;background:#faf7f0;border-radius:44px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.25)}
+.lg-deco{position:absolute;width:86px;height:108px}
+.lg-deco svg{width:100%;height:100%}
+.lg-deco.d1{left:-8px;top:110px;transform:rotate(-8deg)}
+.lg-deco.d2{right:-10px;top:100px;width:110px;height:120px;transform:rotate(6deg)}
+.lg-deco.d3{left:-6px;top:430px;width:100px;height:100px}
+.lg-deco.d4{right:-8px;top:410px;width:110px;height:110px;transform:rotate(-6deg)}
+.lg-spark{position:absolute;color:#8f7cf0;font-size:18px}
+.lg-spark.s1{left:120px;top:210px;font-size:30px}
+.lg-spark.s2{right:86px;top:160px;font-size:16px}
+.lg-spark.s3{left:200px;top:500px;font-size:20px}
+.lg-title{position:absolute;left:0;right:0;top:250px;text-align:center;font-size:52px;line-height:.98;font-weight:800;color:var(--deep);letter-spacing:-0.02em}
+.lg-title span{background:#e7e1ff;padding:0 14px;border-radius:18px;display:inline-block;margin:3px 0}
+.lg-text{position:absolute;left:36px;right:36px;top:470px;margin:0;text-align:center;font-size:15px;line-height:1.5;color:#333}
+.lg-stage{position:absolute;left:50%;bottom:110px;transform:translateX(-50%);width:150px;height:110px;background:#c8a77c;border-radius:75px 75px 0 0}
+.lg-stage svg{position:absolute;left:0;right:0;top:20px;width:100%;height:auto}
+.lg-btns{position:absolute;left:24px;right:24px;bottom:24px;display:flex;flex-direction:column;gap:10px}
+.lg-btn{border:none;border-radius:999px;padding:16px;font-size:16px;font-weight:600;color:#fff;background:var(--purple);cursor:pointer}
+.lg-btn:hover{filter:brightness(1.05)}
+.lg-btn.dark{background:#1d1d2b}
+.lg-btn.ghost{background:transparent;color:var(--deep);border:2px solid var(--purple)}
+
+/* language switch */
+.lang-btn{border:none;border-radius:999px;padding:6px 14px;font-weight:700;font-size:13px;cursor:pointer;background:rgba(255,255,255,.2);color:#fff}
+.lg-screen .lang-btn{position:absolute;top:18px;right:18px;z-index:5;background:#ece8ff;color:var(--deep)}
+
+/* ---------- app shell ---------- */
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:18px 20px 6px;color:#fff}
+header strong{font-size:20px;font-weight:800}
+header .small{color:rgba(255,255,255,.75)}
+header .btn{border:none;border-radius:999px;padding:8px 14px;background:rgba(255,255,255,.15);color:#fff;font-weight:600;cursor:pointer;margin-left:6px}
+nav{display:flex;flex-direction:column;padding:8px 18px 0}
+nav button{display:block;width:100%;min-height:112px;margin:0;padding:16px 18px;border:none;border-radius:24px;position:relative;overflow:hidden;text-align:left;color:#fff;font-size:14px;cursor:pointer;background:var(--c);box-shadow:0 -4px 0 rgba(0,0,0,.08)}
+nav button + button{margin-top:-14px}
+nav button:nth-child(1){--c:#1f7a57;z-index:1}
+nav button:nth-child(2){--c:#e0461f;z-index:2}
+nav button:nth-child(3){--c:#3568d4;z-index:3}
+nav button:nth-child(4){--c:#c4217f;z-index:4}
+nav button:nth-child(5){--c:#8a7152;z-index:5}
+nav button:nth-child(1) .pill{background:#5ee6a0;color:#0c2a1c}
+nav button:nth-child(2) .pill{background:#ff9a3c;color:#3a1400}
+nav button:nth-child(3) .pill{background:#6fb1ff;color:#06204f}
+nav button:nth-child(4) .pill{background:#ff6fb5;color:#44052a}
+nav button:nth-child(5) .pill{background:#d9b98a;color:#2b1d12}
+nav button.active{box-shadow:0 0 0 3px #fff inset}
+.pill{display:inline-block;padding:5px 14px;border-radius:999px;font-size:16px;font-weight:700}
+.desc{display:block;margin-top:8px;max-width:55%;line-height:1.35;opacity:.92}
+.art{position:absolute;right:4px;bottom:-4px;width:120px;height:112px;pointer-events:none}
+.art svg{width:100%;height:100%}
+
+main{padding:24px 16px 40px;max-width:960px;margin:0 auto}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border-radius:24px;padding:20px;margin-bottom:14px}
+section.tab > .card:nth-child(3n+1){background:var(--sage)}
+section.tab > .card:nth-child(3n+2){background:var(--yellow)}
+section.tab > .card:nth-child(3n+3){background:var(--tan)}
+section.tab .card .muted{color:rgba(18,18,18,.65)}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>*{flex:1;min-width:140px}
+label{display:block;margin:8px 0 4px;font-size:14px}
+input,select,textarea{width:100%;padding:11px 12px;border:none;border-radius:14px;background:rgba(255,255,255,.8)}
+.btn{border:none;background:rgba(255,255,255,.7);color:var(--ink);border-radius:999px;padding:10px 18px;font-weight:600;cursor:pointer;margin:4px 4px 4px 0}
+.btn:hover{background:#fff}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.sel{background:var(--ink);color:#fff}
+.btn.small{padding:4px 10px;font-size:12px}
+.answer-btns button{min-width:44px;margin:3px}
+.big-note{font-size:88px;font-weight:800;letter-spacing:-0.04em;line-height:1;text-align:center}
+.hz{text-align:center;font-weight:600}
+.needle{position:relative;height:60px;margin:14px 0}
+.needle .scale{position:absolute;left:0;right:0;top:30px;height:2px;background:var(--ink);opacity:.35}
+.needle .pointer{position:absolute;left:50%;top:10px;width:4px;height:40px;border-radius:2px;background:var(--accent);transform-origin:bottom center;transition:transform .15s}
+svg.staff{width:100%;max-width:420px;display:block;margin:auto;background:#fbfaf6;border-radius:18px}
+.hit{color:#2f7a4c;font-weight:700}.miss{color:var(--accent);font-weight:700}
+.chart-wrap{overflow-x:auto}
+.legend span{display:inline-block;margin-right:14px;font-size:13px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal div{min-height:48px;border-radius:14px;background:rgba(255,255,255,.8);padding:4px;font-size:13px;cursor:pointer}
+.cal .head{background:none;cursor:default;text-align:center;color:rgba(18,18,18,.6);font-weight:600;min-height:auto}
+.cal .blank{background:none;cursor:default}
+.cal .today{background:var(--ink);color:#fff}
+.cal .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:2px}
+.cal .today .dot{background:#fff}
+.event{background:rgba(255,255,255,.8);border-radius:16px;padding:12px 14px;margin:8px 0}
+#aiOut{white-space:pre-wrap;line-height:1.7}
+
+/* ---------- instrument picker ---------- */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal .card{max-width:420px;width:100%;background:var(--card)}
+.inst{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.inst button{padding:14px 6px;border:none;border-radius:18px;background:var(--sage);font-weight:700;cursor:pointer}
+.inst button:nth-child(3n+2){background:var(--yellow)}
+.inst button:nth-child(3n){background:var(--tan)}
+.inst button.sel{background:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+
+<!-- ============ WELCOME / LOGIN ============ -->
+<div id="loginView" class="login-wrap">
+  <div class="lg-screen">
+    <button class="lang-btn lang-toggle" onclick="toggleLang()">EN</button>
+
+    <div class="lg-deco d1"><svg viewBox="0 0 100 130">
+      <path d="M30 10 L30 80 Q30 100 50 100 Q70 100 70 80 L70 10" stroke="#3fcf8e" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <rect x="45" y="100" width="10" height="26" rx="4" fill="#3fcf8e"/>
+      <circle cx="42" cy="50" r="4" fill="#fff"/><circle cx="58" cy="50" r="4" fill="#fff"/>
+      <circle cx="43" cy="51" r="1.8" fill="#1d3d2e"/><circle cx="59" cy="51" r="1.8" fill="#1d3d2e"/>
+      <path d="M44 66 Q50 72 56 66" stroke="#1d3d2e" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div class="lg-deco d2"><svg viewBox="0 0 120 130">
+      <rect x="54" y="0" width="12" height="50" rx="3" fill="#b5501a"/>
+      <circle cx="60" cy="4" r="7" fill="#b5501a"/>
+      <path d="M60 48 C40 48 34 62 36 74 C30 82 28 96 36 106 C42 116 78 116 84 106 C92 96 90 82 84 74 C86 62 80 48 60 48Z" fill="#ff7a1a"/>
+      <circle cx="52" cy="80" r="3.5" fill="#fff"/><circle cx="68" cy="80" r="3.5" fill="#fff"/>
+      <circle cx="53" cy="81" r="1.6" fill="#222"/><circle cx="69" cy="81" r="1.6" fill="#222"/>
+      <path d="M54 92 Q60 98 66 92" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div class="lg-deco d3"><svg viewBox="0 0 120 120">
+      <path d="M20 60 Q20 30 60 30 Q100 30 100 60 L100 96 Q92 104 84 96 Q76 104 68 96 Q60 104 52 96 Q44 104 36 96 Q28 104 20 96Z" fill="#ff3d8b"/>
+      <path d="M36 40 Q60 22 84 40" fill="#c4176b"/>
+      <circle cx="48" cy="66" r="3" fill="#fff"/><circle cx="72" cy="66" r="3" fill="#fff"/>
+      <path d="M52 80 Q60 86 68 80" stroke="#222" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div class="lg-deco d4"><svg viewBox="0 0 120 120">
+      <rect x="14" y="30" width="92" height="82" rx="14" fill="#3d7bf0"/>
+      <rect x="14" y="30" width="92" height="22" rx="14" fill="#2753b8"/>
+      <rect x="30" y="66" width="28" height="22" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+      <rect x="62" y="66" width="28" height="22" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+      <circle cx="44" cy="77" r="3" fill="#fff"/><circle cx="76" cy="77" r="3" fill="#fff"/>
+    </svg></div>
+
+    <span class="lg-spark s1">✦</span><span class="lg-spark s2">✦</span><span class="lg-spark s3">✦</span>
+
+    <div class="lg-title"><span>Practice</span><br><span>Journal</span></div>
+    <p class="lg-text" data-i18n="login_tag"></p>
+
+    <div class="lg-stage"><svg viewBox="0 0 120 60">
+      <path d="M50 4 L50 14 M70 4 L70 14" stroke="#2b1d12" stroke-width="2"/>
+      <circle cx="52" cy="34" r="6" fill="#fff"/><circle cx="68" cy="34" r="6" fill="#fff"/>
+      <circle cx="53" cy="35" r="2.5" fill="#222"/><circle cx="69" cy="35" r="2.5" fill="#222"/>
+      <path d="M52 48 Q60 56 68 48" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg></div>
+
+    <div class="lg-btns">
+      <button class="lg-btn" data-i18n="login_google" onclick="loginGoogle()"></button>
+      <button class="lg-btn dark" data-i18n="login_apple" onclick="loginApple()"></button>
+      <button class="lg-btn ghost" data-i18n="login_demo" onclick="demoLogin()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ INSTRUMENT PICKER ============ -->
+<div id="instModal" class="modal hidden">
+  <div class="card">
+    <h2 data-i18n="inst_title"></h2>
+    <p class="muted small" data-i18n="inst_sub"></p>
+    <div class="inst" id="instGrid"></div>
+  </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="appView" class="hidden">
+  <header>
+    <div><strong id="userName"></strong> <span class="small" id="userEmail"></span></div>
+    <div>
+      <button class="btn" onclick="openInstPicker()">🎼 <span id="instLabel"></span></button>
+      <button class="btn lang-toggle" onclick="toggleLang()">EN</button>
+      <button class="btn" data-i18n="logout" onclick="logout()"></button>
+    </div>
+  </header>
+
+  <nav>
+    <button data-tab="tuner" class="active"><span class="pill" data-i18n="nav_tuner"></span><span class="desc" data-i18n="desc_tuner"></span>
+      <span class="art"><svg viewBox="0 0 100 130">
+        <path d="M30 10 L30 80 Q30 100 50 100 Q70 100 70 80 L70 10" stroke="#e9f6ee" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <rect x="45" y="100" width="10" height="26" rx="4" fill="#e9f6ee"/>
+        <circle cx="42" cy="50" r="4" fill="#fff"/><circle cx="58" cy="50" r="4" fill="#fff"/>
+        <circle cx="43" cy="51" r="1.8" fill="#1f3d2c"/><circle cx="59" cy="51" r="1.8" fill="#1f3d2c"/>
+        <path d="M44 66 Q50 72 56 66" stroke="#1f3d2c" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M80 40 Q88 60 80 80" stroke="#9fe3bf" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M86 32 Q98 60 86 88" stroke="#9fe3bf" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg></span></button>
+    <button data-tab="sheet"><span class="pill" data-i18n="nav_sheet"></span><span class="desc" data-i18n="desc_sheet"></span>
+      <span class="art"><svg viewBox="0 0 120 120">
+        <rect x="10" y="18" width="100" height="92" rx="10" fill="#fff"/>
+        <path d="M20 42H100M20 52H100M20 62H100M20 72H100M20 82H100" stroke="#333" stroke-width="1.5"/>
+        <ellipse cx="62" cy="72" rx="9" ry="7" fill="#333" transform="rotate(-20 62 72)"/>
+        <rect x="69" y="40" width="3" height="32" fill="#333"/>
+        <circle cx="58" cy="70" r="2" fill="#fff"/><circle cx="66" cy="70" r="2" fill="#fff"/>
+        <path d="M56 78 Q62 83 68 78" stroke="#fff" stroke-width="1.5" fill="none"/>
+      </svg></span></button>
+    <button data-tab="games"><span class="pill" data-i18n="nav_games"></span><span class="desc" data-i18n="desc_games"></span>
+      <span class="art"><svg viewBox="0 0 120 120">
+        <rect x="8" y="46" width="104" height="66" rx="8" fill="#fff" stroke="#333" stroke-width="2"/>
+        <rect x="24" y="46" width="12" height="40" rx="3" fill="#333"/><rect x="44" y="46" width="12" height="40" rx="3" fill="#333"/>
+        <rect x="74" y="46" width="12" height="40" rx="3" fill="#333"/><rect x="94" y="46" width="12" height="40" rx="3" fill="#333"/>
+        <circle cx="48" cy="90" r="3" fill="#fff"/><circle cx="58" cy="92" r="2" fill="#fff"/>
+        <circle cx="64" cy="22" r="8" fill="#ffd0ea"/><rect x="71" y="0" width="3" height="24" fill="#ffd0ea"/>
+        <circle cx="50" cy="38" r="4" fill="#ffd0ea"/>
+      </svg></span></button>
+    <button data-tab="calendar"><span class="pill" data-i18n="nav_calendar"></span><span class="desc" data-i18n="desc_calendar"></span>
+      <span class="art"><svg viewBox="0 0 120 120">
+        <rect x="14" y="26" width="92" height="82" rx="12" fill="#f5e6d3"/>
+        <rect x="14" y="26" width="92" height="22" rx="12" fill="#b88a5e"/>
+        <circle cx="40" cy="70" r="3" fill="#2b1d12"/><circle cx="80" cy="70" r="3" fill="#2b1d12"/>
+        <path d="M48 84 Q60 94 72 84" stroke="#2b1d12" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="34" cy="36" r="3" fill="#f5e6d3"/><circle cx="86" cy="36" r="3" fill="#f5e6d3"/>
+      </svg></span></button>
+    <button data-tab="stats"><span class="pill" data-i18n="nav_stats"></span><span class="desc" data-i18n="desc_stats"></span>
+      <span class="art"><svg viewBox="0 0 120 120">
+        <path d="M38 116 L52 16 L68 16 L82 116 Z" fill="#f2d9a8" stroke="#2b1d12" stroke-width="2"/>
+        <path d="M60 104 L76 36" stroke="#e0201b" stroke-width="3" stroke-linecap="round"/>
+        <rect x="68" y="48" width="14" height="10" rx="2" fill="#2b1d12"/>
+        <circle cx="54" cy="70" r="3" fill="#2b1d12"/><circle cx="66" cy="70" r="3" fill="#2b1d12"/>
+        <path d="M54 82 Q60 87 66 82" stroke="#2b1d12" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg></span></button>
+  </nav>
+
+  <main>
+    <!-- ---------- TAB 1: TUNER & DRONE ---------- -->
+    <section class="tab active" id="tab-tuner">
+      <div class="card">
+        <h2 data-i18n="tuner_title"></h2>
+        <p class="muted small" data-i18n="tuner_hint"></p>
+        <div id="stringBtns"></div>
+        <div class="big-note" id="tunerNote">—</div>
+        <div class="hz" id="tunerHz">0.0 Hz</div>
+        <div class="needle"><div class="scale"></div><div class="pointer" id="needlePtr"></div></div>
+        <p class="hz small" id="tunerMsg" data-i18n="tuner_wait"></p>
+        <button class="btn primary" id="tunerBtn" onclick="toggleTuner()"></button>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="drone_title"></h2>
+        <div class="row">
+          <div>
+            <label data-i18n="drone_note"></label>
+            <select id="droneSel" onchange="updateDroneFreq()"></select>
+          </div>
+          <div>
+            <label>A4 = <span id="refLabel">440</span> Hz</label>
+            <input type="range" id="refA" min="415" max="466" value="440" oninput="refChanged()">
+          </div>
+        </div>
+        <button class="btn primary" id="droneBtn" onclick="toggleDrone()"></button>
+      </div>
+    </section>
+
+    <!-- ---------- TAB 2: SHEET MUSIC ---------- -->
+    <section class="tab" id="tab-sheet">
+      <div class="card">
+        <h2 data-i18n="sheet_import_title"></h2>
+        <p class="muted small" data-i18n="sheet_import_hint"></p>
+        <label data-i18n="sheet_upload"></label>
+        <input type="file" accept=".xml,.musicxml" onchange="importLocalFile(event)">
+        <button class="btn" data-i18n="sheet_drive" onclick="importFromDrive()"></button>
+        <div id="driveList"></div>
+      </div>
+      <div class="card">
+        <h2 id="sheetTitle" data-i18n="sheet_none"></h2>
+        <div id="sheetNotes" class="muted"></div>
+        <svg id="sheetStaff" class="staff hidden" viewBox="0 0 320 200"></svg>
+      </div>
+      <div class="card">
+        <h2 data-i18n="sheet_library"></h2>
+        <div id="libList"></div>
+      </div>
+    </section>
+
+    <!-- ---------- TAB 3: GAMES ---------- -->
+    <section class="tab" id="tab-games">
+      <div class="row" style="margin-bottom:12px">
+        <button class="btn sel" id="gameTheoryBtn" data-i18n="games_theory" onclick="showGame('theory')"></button>
+        <button class="btn" id="gameSightBtn" data-i18n="games_sight" onclick="showGame('sight')"></button>
+      </div>
+
+      <!-- Game A: name the note -->
+      <div id="game-theory" class="card">
+        <h2 data-i18n="theory_title"></h2>
+        <p class="muted small" id="keyInfo"></p>
+        <svg id="theoryStaff" class="staff" viewBox="0 0 320 200"></svg>
+        <p class="small muted" style="text-align:center;margin:8px 0" data-i18n="theory_hint"></p>
+        <div class="answer-btns" id="letterBtns" style="text-align:center"></div>
+        <div class="answer-btns" style="text-align:center">
+          <button class="btn acc-btn" data-a="b" onclick="setAcc('b')">♭</button>
+          <button class="btn acc-btn" data-a="" onclick="setAcc('')">♮</button>
+          <button class="btn acc-btn" data-a="#" onclick="setAcc('#')">♯</button>
+        </div>
+        <div style="text-align:center">
+          <button class="btn primary" data-i18n="btn_check" onclick="checkTheory()"></button>
+          <button class="btn" data-i18n="btn_next" onclick="nextTheory()"></button>
+        </div>
+        <p id="theoryFeedback" style="text-align:center;font-size:18px;min-height:28px"></p>
+        <p class="small muted" style="text-align:center"><span data-i18n="theory_score"></span><span id="theoryScore">0/0</span></p>
+      </div>
+
+      <!-- Game B: sight-reading -->
+      <div id="game-sight" class="card hidden">
+        <h2 data-i18n="sight_title"></h2>
+        <p class="muted small" data-i18n="sight_hint"></p>
+        <svg id="sightStaff" class="staff" viewBox="0 0 320 200"></svg>
+        <p id="sightFeedback" style="text-align:center;min-height:28px;font-size:18px"></p>
+        <div style="text-align:center">
+          <button class="btn primary" id="sightBtn" data-i18n="sight_start" onclick="startSight()"></button>
+        </div>
+        <p class="small muted" style="text-align:center"><span data-i18n="sight_score"></span><span id="sightScore">—</span></p>
+      </div>
+    </section>
+
+    <!-- ---------- TAB 4: CALENDAR ---------- -->
+    <section class="tab" id="tab-calendar">
+      <div class="card">
+        <div class="row" style="align-items:center">
+          <button class="btn" onclick="moveMonth(-1)">‹</button>
+          <h2 id="calTitle" style="text-align:center;flex:2"></h2>
+          <button class="btn" onclick="moveMonth(1)">›</button>
+        </div>
+        <div class="cal" id="calGrid" style="margin-top:10px"></div>
+      </div>
+      <div class="card">
+        <h2 data-i18n="cal_add"></h2>
+        <div class="row">
+          <div><label data-i18n="cal_name"></label><input id="evTitle" data-i18n-ph="cal_name_ph"></div>
+          <div><label data-i18n="cal_type"></label>
+            <select id="evType">
+              <option value="rehearsal" data-i18n="type_rehearsal"></option>
+              <option value="wedding" data-i18n="type_wedding"></option>
+              <option value="concert" data-i18n="type_concert"></option>
+              <option value="audition" data-i18n="type_audition"></option>
+              <option value="group" data-i18n="type_group"></option>
+              <option value="other" data-i18n="type_other"></option>
+            </select></div>
+        </div>
+        <div class="row">
+          <div><label data-i18n="cal_date"></label><input type="date" id="evDate"></div>
+          <div><label data-i18n="cal_time"></label><input type="time" id="evTime" value="19:00"></div>
+        </div>
+        <button class="btn primary" data-i18n="cal_save" onclick="addEvent()"></button>
+        <h3 style="margin-top:18px"><span data-i18n="cal_day"></span> <span id="selDayLabel">—</span></h3>
+        <div id="dayEvents" class="muted small"></div>
+      </div>
+    </section>
+
+    <!-- ---------- TAB 5: STATS ---------- -->
+    <section class="tab" id="tab-stats">
+      <div class="card">
+        <h2 data-i18n="stats_log"></h2>
+        <div class="row">
+          <div><label data-i18n="stats_date"></label><input type="date" id="sDate"></div>
+          <div><label data-i18n="stats_min"></label><input type="number" id="sMin" value="30" min="1"></div>
+          <div><label data-i18n="stats_focus"></label>
+            <select id="sFocus">
+              <option value="bow" data-i18n="focus_bow"></option>
+              <option value="intonation" data-i18n="focus_intonation"></option>
+              <option value="rhythm" data-i18n="focus_rhythm"></option>
+              <option value="shifting" data-i18n="focus_shifting"></option>
+              <option value="vibrato" data-i18n="focus_vibrato"></option>
+              <option value="sight" data-i18n="focus_sight"></option>
+              <option value="piece" data-i18n="focus_piece"></option>
+            </select></div>
+        </div>
+        <label data-i18n="stats_rate"></label>
+        <input type="range" id="sRate" min="1" max="5" value="3">
+        <label data-i18n="stats_note"></label>
+        <textarea id="sNote" rows="2" data-i18n-ph="stats_note_ph"></textarea>
+        <button class="btn primary" data-i18n="stats_save" onclick="addSession()"></button>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="stats_7d"></h2>
+        <div class="legend small">
+          <span><i style="background:var(--accent)"></i><span data-i18n="legend_practice"></span></span>
+          <span><i style="background:#c9a66b"></i><span data-i18n="legend_usage"></span></span>
+        </div>
+        <div class="chart-wrap"><svg id="chartDaily" viewBox="0 0 640 260" style="width:100%;min-width:480px"></svg></div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="stats_focus_title"></h2>
+        <div class="chart-wrap"><svg id="chartFocus" viewBox="0 0 640 260" style="width:100%;min-width:480px"></svg></div>
+        <div id="localInsight" class="small" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="game_stats_title"></h2>
+        <div id="gameStats" class="small muted"></div>
+      </div>
+
+      <div class="card">
+        <h2 data-i18n="ai_title"></h2>
+        <p class="muted small" data-i18n="ai_hint"></p>
+        <button class="btn primary" data-i18n="ai_btn" onclick="aiAnalyze()"></button>
+        <div id="aiOut" class="small" style="margin-top:10px"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ==========================================================
+   CONFIG — ใส่ค่าจริงเมื่อจะใช้งานจริง
+   ========================================================== */
+const CONFIG = {
+  GOOGLE_CLIENT_ID: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+  APPLE_CLIENT_ID: "com.yourname.practicejournal",
+  APPLE_REDIRECT_URI: window.location.origin + "/",
+  ANTHROPIC_API_KEY: "",   // ทดสอบเท่านั้น — ระบบจริงควรเรียกผ่าน backend ของคุณ
+  AI_MODEL: "claude-haiku-5-5"
+};
+
+/* ==========================================================
+   LANGUAGE (Thai / English)
+   ========================================================== */
+const STR = {
+  th: {
+    login_tag: "ฝึกซ้อมไวโอลินให้เป็นนิสัย ตั้งเสียง อ่านโน้ต และดูความก้าวหน้าไปพร้อมกัน",
+    login_google: "เข้าสู่ระบบด้วย Google",
+    login_apple: "เข้าสู่ระบบด้วย Apple",
+    login_demo: "ลองใช้งานก่อน (Demo)",
+    logout: "ออกจากระบบ",
+    demo_name: "นักดนตรี (Demo)",
+    login_fail: "ล็อกอิน Apple ไม่สำเร็จ",
+    inst_title: "เลือกเครื่องดนตรีของคุณ",
+    inst_sub: "แอปจะปรับเครื่องมือให้เข้ากับเครื่องที่เลือก",
+    inst_violin: "ไวโอลิน", inst_viola: "วิโอลา", inst_cello: "เชลโล",
+    inst_guitar: "กีตาร์", inst_piano: "เปียโน", inst_flute: "ฟลุต",
+    nav_tuner: "ตัวตั้งเสียง & Drone", nav_sheet: "โน้ตเพลง", nav_games: "เกมดนตรี",
+    nav_calendar: "ปฏิทิน", nav_stats: "สถิติ",
+    desc_tuner: "ปรับเสียงสายและเปิดเสียงอ้างอิง",
+    desc_sheet: "นำเข้าโน้ตจากเครื่องหรือ Google Drive",
+    desc_games: "ทายชื่อโน้ต และฝึก sight-reading ด้วยเสียงของคุณ",
+    desc_calendar: "บันทึกงานรวมวง งานแต่ง และคอนเสิร์ต",
+    desc_stats: "บันทึกการซ้อม และวิเคราะห์ด้วย AI ทุก 7 วัน",
+    tuner_title: "ตัวตั้งเสียง (Tuner)",
+    tuner_hint: "อนุญาตให้ใช้ไมโครโฟนเมื่อกดเริ่ม แล้วเล่นทีละสาย",
+    tuner_wait: "กดเริ่มเพื่อฟัง",
+    tuner_start: "เริ่มตั้งเสียง", tuner_stop: "หยุด",
+    tuner_nosound: "ไม่ได้ยินเสียง",
+    tuner_ok: "✅ ตรงแล้ว",
+    tuner_high: "สูงไป {0} cents — คลายสายลง",
+    tuner_low: "ต่ำไป {0} cents — ขึ้นสาย",
+    tuner_nostr: "เครื่องนี้ไม่มีสายเปิด ใช้ตัวตั้งเสียงจากไมค์แบบโครมาติกแทน",
+    drone_title: "Drone (เสียงอ้างอิง)", drone_note: "โน้ตอ้างอิง",
+    drone_on: "▶ เปิด Drone", drone_off: "■ หยุด Drone",
+    sheet_import_title: "นำเข้าโน้ตเพลง",
+    sheet_import_hint: "รองรับไฟล์ MusicXML (.musicxml / .xml) จากเครื่องหรือ Google Drive",
+    sheet_upload: "อัปโหลดจากเครื่อง",
+    sheet_drive: "☁️ นำเข้าจาก Google Drive",
+    sheet_none: "ยังไม่ได้นำเข้าเพลง",
+    sheet_count: "{0} โน้ต: ",
+    sheet_untitled: "ไม่มีชื่อเพลง",
+    sheet_library: "คลังเพลง",
+    sheet_lib_empty: "ยังไม่มีเพลงที่บันทึกไว้",
+    sheet_lib_item: "🎼 {0} — {1} โน้ต",
+    sheet_drive_empty: "ไม่พบไฟล์ MusicXML ใน Drive",
+    sheet_parse_err: "ไฟล์ไม่ถูกต้อง",
+    need_client: "ต้องตั้งค่า GOOGLE_CLIENT_ID ก่อน (หรือล็อกอินด้วย Google)",
+    games_theory: "🎼 ทายชื่อโน้ต", games_sight: "🎻 Sight-reading",
+    theory_title: "ทายชื่อโน้ตตามกุญแจเสียง",
+    theory_hint: "เลือกชื่อโน้ต แล้วเลือกเครื่องหมาย ♭ ♮ ♯ แล้วกดตอบ",
+    key_line: "กุญแจเสียง: {0} เมเจอร์ — {1}",
+    sig_none: "ไม่มีเครื่องหมายกำกับกุญแจ",
+    sig_sharp: "{0} ชาร์ป ({1})",
+    sig_flat: "{0} แฟลต ({1})",
+    theory_pick_letter: "👆 เลือกชื่อโน้ต (A–G) ก่อน",
+    theory_pick_acc: "👆 เลือกเครื่องหมาย ♭ ♮ ♯ ก่อน",
+    theory_ok: "✅ ถูกต้อง!",
+    theory_wrong: "❌ คำตอบคือ {0}",
+    theory_score: "คะแนน: ",
+    btn_check: "ตอบ", btn_next: "ข้อถัดไป",
+    sight_title: "Sight-reading",
+    sight_hint: "กด \"เริ่ม\" แล้วเล่นโน้ตตามลำดับบนหน้าจอ แอปจะฟังเสียงและบอกว่าโน้ตที่เล่นถูกหรือไม่",
+    sight_start: "เริ่มเล่น", sight_stop: "หยุด", sight_restart: "เล่นอีกครั้ง",
+    sight_asking: "กำลังขอสิทธิ์ใช้ไมโครโฟน...",
+    sight_go: "เริ่มเล่นได้เลย 🎻",
+    sight_no_mic: "เบราว์เซอร์นี้ใช้ไมโครโฟนไม่ได้ ต้องเปิดแอปผ่าน https หรือ localhost",
+    mic_denied: "กรุณาอนุญาตการใช้ไมโครโฟนแล้วลองใหม่",
+    sight_timeout: "⏱ หมดเวลาโน้ตนี้",
+    sight_ok: "✅ ถูกต้อง",
+    sight_wrong: "❌ เล่น {0} แต่โน้ตที่ต้องการคือ {1}",
+    sight_all: "🎉 เล่นถูกทั้งหมด!",
+    sight_partial: "เล่นถูก {0} จาก {1} โน้ต",
+    sight_score: "ผลรวม: ",
+    sight_result: "{0}/{1} โน้ตถูก",
+    cal_add: "เพิ่มกิจกรรม", cal_name: "ชื่อกิจกรรม", cal_name_ph: "เช่น ซ้อมรวมวง",
+    cal_type: "ประเภท", cal_date: "วันที่", cal_time: "เวลา",
+    cal_save: "บันทึกกิจกรรม", cal_day: "กิจกรรมวันที่", cal_none: "ไม่มีกิจกรรมในวันนี้",
+    cal_delete: "ลบ", cal_need: "กรุณากรอกชื่อ วันที่ และเวลา",
+    type_rehearsal: "งานรวมวง", type_wedding: "งานแต่ง", type_concert: "คอนเสิร์ต",
+    type_audition: "ออดิชั่น", type_group: "ซ้อมกลุ่ม", type_other: "อื่นๆ",
+    stats_log: "บันทึกการซ้อม", stats_date: "วันที่", stats_min: "นาที",
+    stats_focus: "หัวข้อที่ซ้อม",
+    stats_rate: "ความพอใจในการซ้อมวันนี้ (1 = ต้องปรับปรุงมาก, 5 = ดีมาก)",
+    stats_note: "บันทึกเพิ่มเติม", stats_note_ph: "เช่น ท่อน 32–40 ยังเข้าจังหวะไม่นิ่ง",
+    stats_save: "บันทึก", stats_need_min: "กรุณาใส่จำนวนนาที",
+    stats_7d: "สถิติ 7 วันล่าสุด", legend_practice: "นาทีซ้อม", legend_usage: "นาทีใช้งานแอป",
+    stats_focus_title: "ความพอใจแยกตามหัวข้อ (ยิ่งต่ำยิ่งควรปรับปรุง)",
+    stats_no_focus: "ยังไม่มีข้อมูลการซ้อม 7 วันนี้",
+    focus_bow: "เทคนิคคันชัก (bow)", focus_intonation: "การลงเสียง (intonation)",
+    focus_rhythm: "จังหวะ (rhythm)", focus_shifting: "Shifting", focus_vibrato: "Vibrato",
+    focus_sight: "Sight-reading", focus_piece: "บทเพลง / ท่อน",
+    insight_empty: "บันทึกการซ้อมอย่างน้อย 1 ครั้งเพื่อดูคำแนะนำ",
+    insight_text: "ซ้อมรวม {0} นาทีใน 7 วันที่ผ่านมา · จุดที่ควรโฟกัสมากที่สุด: {1}",
+    insight_note: " (บันทึกล่าสุด: \"{0}\")",
+    game_stats_title: "ผลเกม 7 วันล่าสุด", game_none: "ยังไม่มีผลเกมในช่วงนี้",
+    game_theory_lbl: "ทายชื่อโน้ต", game_sight_lbl: "Sight-reading",
+    unit_items: "ข้อ", unit_runs: "รอบ",
+    ai_title: "🤖 วิเคราะห์การซ้อมด้วย AI",
+    ai_hint: "ส่งข้อมูลการซ้อม 7 วันไปให้ AI วิเคราะห์จุดที่ควรปรับปรุง",
+    ai_btn: "วิเคราะห์ด้วย AI", ai_loading: "กำลังวิเคราะห์...",
+    ai_nokey: "ยังไม่ได้ตั้งค่า API key — ใส่ CONFIG.ANTHROPIC_API_KEY (ทดสอบเท่านั้น) หรือเรียกผ่าน backend ของคุณ\n\nข้อมูลที่จะส่ง:\n",
+    ai_err: "เรียก AI ไม่สำเร็จ: {0}",
+    ai_prompt: "คุณคือครูไวโอลินผู้เชี่ยวชาญ จากข้อมูลการซ้อม 7 วันนี้ (JSON) ช่วยวิเคราะห์เป็นภาษาไทย: 1) จุดที่มีปัญหาซ้ำๆ จากหัวข้อและคะแนนความพอใจ 2) แนวโน้มการซ้อมและการใช้งานแอป 3) แผนซ้อมสั้นๆ สำหรับสัปดาห์หน้า 3 ข้อ ตอบกระชับ\n\n",
+    lang_label: "EN"
+  },
+  en: {
+    login_tag: "Build a daily violin habit: tune, read notes and track your progress together.",
+    login_google: "Continue with Google",
+    login_apple: "Sign in with Apple",
+    login_demo: "Let's go (try the demo)",
+    logout: "Log out",
+    demo_name: "Musician (Demo)",
+    login_fail: "Apple sign-in failed",
+    inst_title: "Choose your instrument",
+    inst_sub: "The tools will adapt to the instrument you pick.",
+    inst_violin: "Violin", inst_viola: "Viola", inst_cello: "Cello",
+    inst_guitar: "Guitar", inst_piano: "Piano", inst_flute: "Flute",
+    nav_tuner: "Tuner & Drone", nav_sheet: "Sheet Music", nav_games: "Music Games",
+    nav_calendar: "Calendar", nav_stats: "Stats",
+    desc_tuner: "Tune your strings and play a reference tone",
+    desc_sheet: "Import scores from your device or Google Drive",
+    desc_games: "Name the notes and practice sight-reading with your own sound",
+    desc_calendar: "Log ensemble rehearsals, weddings and concerts",
+    desc_stats: "Log practice and get AI analysis every 7 days",
+    tuner_title: "Tuner",
+    tuner_hint: "Allow microphone access when you start, then play one string at a time.",
+    tuner_wait: "Press start to listen",
+    tuner_start: "Start tuning", tuner_stop: "Stop",
+    tuner_nosound: "No sound detected",
+    tuner_ok: "✅ In tune",
+    tuner_high: "{0} cents sharp — lower the string",
+    tuner_low: "{0} cents flat — tighten the string",
+    tuner_nostr: "This instrument has no open strings. Use the chromatic mic tuner instead.",
+    drone_title: "Drone (reference tone)", drone_note: "Reference note",
+    drone_on: "▶ Start drone", drone_off: "■ Stop drone",
+    sheet_import_title: "Import a score",
+    sheet_import_hint: "Supports MusicXML (.musicxml / .xml) from your device or Google Drive.",
+    sheet_upload: "Upload from device",
+    sheet_drive: "☁️ Import from Google Drive",
+    sheet_none: "No score imported yet",
+    sheet_count: "{0} notes: ",
+    sheet_untitled: "Untitled",
+    sheet_library: "Library",
+    sheet_lib_empty: "No scores saved yet",
+    sheet_lib_item: "🎼 {0} — {1} notes",
+    sheet_drive_empty: "No MusicXML files found in Drive",
+    sheet_parse_err: "Invalid file",
+    need_client: "Set GOOGLE_CLIENT_ID first (or sign in with Google)",
+    games_theory: "🎼 Name the note", games_sight: "🎻 Sight-reading",
+    theory_title: "Name the note in the key",
+    theory_hint: "Pick the letter, pick ♭ ♮ ♯, then press Check.",
+    key_line: "Key: {0} major — {1}",
+    sig_none: "No key signature",
+    sig_sharp: "{0} sharp(s) ({1})",
+    sig_flat: "{0} flat(s) ({1})",
+    theory_pick_letter: "👆 Pick a letter (A–G) first",
+    theory_pick_acc: "👆 Pick ♭, ♮ or ♯ first",
+    theory_ok: "✅ Correct!",
+    theory_wrong: "❌ The answer is {0}",
+    theory_score: "Score: ",
+    btn_check: "Check", btn_next: "Next",
+    sight_title: "Sight-reading",
+    sight_hint: "Press Start, then play the notes in order. The app listens and tells you if each note is right.",
+    sight_start: "Start", sight_stop: "Stop", sight_restart: "Play again",
+    sight_asking: "Requesting microphone access...",
+    sight_go: "Start playing now 🎻",
+    sight_no_mic: "This browser can't use the microphone. Open the app via https or localhost.",
+    mic_denied: "Please allow microphone access and try again.",
+    sight_timeout: "⏱ Time's up for this note",
+    sight_ok: "✅ Correct",
+    sight_wrong: "❌ You played {0}, the target is {1}",
+    sight_all: "🎉 All correct!",
+    sight_partial: "Correct: {0} of {1} notes",
+    sight_score: "Result: ",
+    sight_result: "{0}/{1} correct",
+    cal_add: "Add event", cal_name: "Event name", cal_name_ph: "e.g. Ensemble rehearsal",
+    cal_type: "Type", cal_date: "Date", cal_time: "Time",
+    cal_save: "Save event", cal_day: "Events on", cal_none: "No events on this day",
+    cal_delete: "Delete", cal_need: "Please enter a name, date and time",
+    type_rehearsal: "Ensemble", type_wedding: "Wedding", type_concert: "Concert",
+    type_audition: "Audition", type_group: "Group practice", type_other: "Other",
+    stats_log: "Log practice", stats_date: "Date", stats_min: "Minutes",
+    stats_focus: "Focus",
+    stats_rate: "How satisfied were you today? (1 = needs work, 5 = great)",
+    stats_note: "Notes", stats_note_ph: "e.g. bars 32–40 still unsteady in rhythm",
+    stats_save: "Save", stats_need_min: "Please enter minutes",
+    stats_7d: "Last 7 days", legend_practice: "Practice min", legend_usage: "App use min",
+    stats_focus_title: "Satisfaction by focus (lower = needs work)",
+    stats_no_focus: "No practice logged in the last 7 days",
+    focus_bow: "Bow technique", focus_intonation: "Intonation",
+    focus_rhythm: "Rhythm", focus_shifting: "Shifting", focus_vibrato: "Vibrato",
+    focus_sight: "Sight-reading", focus_piece: "Repertoire / passage",
+    insight_empty: "Log at least one session to see insights",
+    insight_text: "Total {0} min in the last 7 days · Focus most on: {1}",
+    insight_note: " (latest note: \"{0}\")",
+    game_stats_title: "Game results (last 7 days)", game_none: "No game results in this period",
+    game_theory_lbl: "Name the note", game_sight_lbl: "Sight-reading",
+    unit_items: "questions", unit_runs: "runs",
+    ai_title: "🤖 AI practice analysis",
+    ai_hint: "Send your last 7 days of practice to AI for analysis.",
+    ai_btn: "Analyze with AI", ai_loading: "Analyzing...",
+    ai_nokey: "No API key set — add CONFIG.ANTHROPIC_API_KEY (testing only) or call the API from your own backend.\n\nData that would be sent:\n",
+    ai_err: "AI request failed: {0}",
+    ai_prompt: "You are an expert violin teacher. From this 7-day practice data (JSON), answer in English: 1) recurring problem areas based on focus and satisfaction scores 2) practice and app-usage trends 3) three short practice goals for next week. Be concise.\n\n",
+    lang_label: "ไทย"
+  }
+};
+let lang = localStorage.getItem("pj_lang") || "th";
+function t(key, ...args){
+  let s = (STR[lang] && STR[lang][key]) || STR.th[key] || key;
+  args.forEach((a,i)=> s = s.replace("{"+i+"}", a));
+  return s;
+}
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  document.querySelectorAll(".lang-toggle").forEach(b => b.textContent = STR[lang].lang_label);
+  if(typeof user !== "undefined" && user){
+    updateInstLabel();
+    buildStringButtons();
+    renderLibrary();
+    renderCalendar();
+    renderStats();
+    if(theory.key) $("#keyInfo").textContent = keyLine(theory.key);
+    $("#tunerBtn").textContent = tunerOn ? t("tuner_stop") : t("tuner_start");
+    $("#droneBtn").textContent = droneOsc ? t("drone_off") : t("drone_on");
+    $("#sightBtn").textContent = sr.running ? t("sight_stop") : (sr.hits||sr.total ? t("sight_restart") : t("sight_start"));
+  }
+  const first = document.querySelector("#instGrid");
+  if(first && !$("#instModal").classList.contains("hidden")) openInstPicker();
+}
+function setLang(l){ lang = l; localStorage.setItem("pj_lang", l); applyLang(); }
+function toggleLang(){ setLang(lang === "th" ? "en" : "th"); }
+
+/* ==========================================================
+   INSTRUMENTS
+   ========================================================== */
+const INSTRUMENTS = {
+  violin:{key:"inst_violin", strings:[{n:"G3",m:55},{n:"D4",m:62},{n:"A4",m:69},{n:"E5",m:76}]},
+  viola: {key:"inst_viola",  strings:[{n:"C3",m:48},{n:"G3",m:55},{n:"D4",m:62},{n:"A4",m:69}]},
+  cello: {key:"inst_cello",  strings:[{n:"C2",m:36},{n:"G2",m:43},{n:"D3",m:50},{n:"A3",m:57}]},
+  guitar:{key:"inst_guitar", strings:[{n:"E2",m:40},{n:"A2",m:45},{n:"D3",m:50},{n:"G3",m:55},{n:"B3",m:59},{n:"E4",m:64}]},
+  piano: {key:"inst_piano",  strings:[]},
+  flute: {key:"inst_flute",  strings:[]}
+};
+const NOTE_NAMES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const PC = [["C",""],["C","#"],["D",""],["D","#"],["E",""],["F",""],["F","#"],["G",""],["G","#"],["A",""],["A","#"],["B",""]];
+const LI = {C:0,D:1,E:2,F:3,G:4,A:5,B:6};
+const noteName = m => NOTE_NAMES[((m%12)+12)%12] + (Math.floor(m/12)-1);
+
+/* ==========================================================
+   STORAGE
+   ========================================================== */
+const lsGet = k => { try { return localStorage.getItem(k); } catch(e){ return null; } };
+const lsSet = (k,v) => { try { localStorage.setItem(k,v); } catch(e){} };
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+function localISO(d = new Date()){
+  const z = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+  return z.toISOString().slice(0,10);
+}
+
+let user = null, db = null, refA = 440;
+function loadDB(){
+  db = JSON.parse(lsGet("pj_" + user.email) || "null") ||
+       {instrument:"violin", instrumentChosen:false, sessions:[], events:[], usage:{}, games:[]};
+  db.sessions ||= []; db.events ||= []; db.usage ||= {}; db.games ||= [];
+}
+function saveDB(){ lsSet("pj_" + user.email, JSON.stringify(db)); }
+
+/* ==========================================================
+   LOGIN
+   ========================================================== */
+function parseJwt(tok){
+  return JSON.parse(atob(tok.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));
+}
+let gTokenClient = null, gAccessToken = null;
+
+function loginGoogle(){
+  if(!CONFIG.GOOGLE_CLIENT_ID.includes("apps.googleusercontent") || typeof google === "undefined"){
+    return demoLogin();
+  }
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CONFIG.GOOGLE_CLIENT_ID,
+    scope: "openid email profile https://www.googleapis.com/auth/drive.readonly",
+    callback: async (resp) => {
+      gAccessToken = resp.access_token;
+      const r = await fetch("https://www.googleapis.com/oauth2/v3/userinfo",
+        {headers:{Authorization:"Bearer " + gAccessToken}});
+      const p = await r.json();
+      finishLogin({provider:"google", name:p.name, email:p.email, picture:p.picture});
+    }
+  });
+  gTokenClient.requestAccessToken();
+}
+
+async function loginApple(){
+  if(CONFIG.APPLE_CLIENT_ID.startsWith("com.yourname") || typeof AppleID === "undefined"){
+    return demoLogin();
+  }
+  AppleID.auth.init({clientId: CONFIG.APPLE_CLIENT_ID, scope:"name email",
+    redirectURI: CONFIG.APPLE_REDIRECT_URI, usePopup:true});
+  try{
+    const res = await AppleID.auth.signIn();
+    const p = parseJwt(res.authorization.id_token);
+    const nm = res.user ? [res.user.name?.firstName, res.user.name?.lastName].filter(Boolean).join(" ") : "";
+    finishLogin({provider:"apple", name: nm || "Apple User", email: p.email});
+  }catch(e){ alert(t("login_fail")); }
+}
+
+function demoLogin(){ finishLogin({provider:"demo", name:t("demo_name"), email:"demo@local"}); }
+
+function finishLogin(u){
+  user = u;
+  lsSet("pj_session", JSON.stringify(u));
+  startApp();
+}
+function logout(){ lsSet("pj_session", ""); location.reload(); }
+
+/* ==========================================================
+   APP START
+   ========================================================== */
+function startApp(){
+  $("#loginView").classList.add("hidden");
+  $("#appView").classList.remove("hidden");
+  $("#userName").textContent = user.name || "";
+  $("#userEmail").textContent = user.email || "";
+  loadDB();
+  updateInstLabel();
+  buildStringButtons();
+  buildDroneOptions();
+  setupCalendar();
+  newTheoryQuestion();
+  drawStaff($("#sightStaff"), []);
+  $("#sDate").value = localISO();
+  renderLibrary();
+  renderStats();
+  if(!db.instrumentChosen) openInstPicker();
+  setInterval(trackUsage, 15000);
+}
+function updateInstLabel(){ $("#instLabel").textContent = t(INSTRUMENTS[db.instrument].key); }
+
+function openInstPicker(){
+  const grid = $("#instGrid");
+  grid.innerHTML = "";
+  Object.entries(INSTRUMENTS).forEach(([k,v])=>{
+    const b = document.createElement("button");
+    b.textContent = t(v.key);
+    if(db.instrument === k) b.classList.add("sel");
+    b.onclick = ()=>{
+      db.instrument = k; db.instrumentChosen = true; saveDB();
+      $("#instModal").classList.add("hidden");
+      updateInstLabel(); buildStringButtons(); stopTuner();
+    };
+    grid.appendChild(b);
+  });
+  $("#instModal").classList.remove("hidden");
+}
+
+/* ==========================================================
+   AUDIO: shared context, pitch detection
+   ========================================================== */
+let actx = null;
+function ac(){
+  if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if(actx.state === "suspended") actx.resume();
+  return actx;
+}
+const hzOf = m => refA * Math.pow(2, (m - 69) / 12);
+const midiOf = hz => 69 + 12 * Math.log2(hz / refA);
+
+function autoCorrelate(buf, sampleRate){
+  let rms = 0;
+  for(const v of buf) rms += v*v;
+  rms = Math.sqrt(rms / buf.length);
+  if(rms < 0.01) return -1;
+  let r1 = 0, r2 = buf.length - 1; const thres = 0.2;
+  for(let i=0;i<buf.length/2;i++) if(Math.abs(buf[i]) < thres){ r1 = i; break; }
+  for(let i=1;i<buf.length/2;i++) if(Math.abs(buf[buf.length-i]) < thres){ r2 = buf.length - i; break; }
+  const b = buf.slice(r1, r2), n = b.length;
+  const c = new Array(n).fill(0);
+  for(let i=0;i<n;i++) for(let j=0;j<n-i;j++) c[i] += b[j]*b[j+i];
+  let d = 0; while(d < n-1 && c[d] > c[d+1]) d++;
+  let maxv = -1, maxpos = -1;
+  for(let i=d;i<n;i++) if(c[i] > maxv){ maxv = c[i]; maxpos = i; }
+  let T0 = maxpos;
+  if(T0 > 0 && T0 < n-1){
+    const x1=c[T0-1], x2=c[T0], x3=c[T0+1];
+    const a=(x1+x3-2*x2)/2, bb=(x3-x1)/2;
+    if(a) T0 = T0 - bb/(2*a);
+  }
+  return T0 > 0 ? sampleRate / T0 : -1;
+}
+
+let micStream = null, micAnalyser = null, micBuf = null;
+function micSupported(){
+  return !!(window.isSecureContext && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+async function ensureMic(){
+  if(micStream) { ac(); return; }
+  micStream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  const ctx = ac();
+  const src = ctx.createMediaStreamSource(micStream);
+  micAnalyser = ctx.createAnalyser();
+  micAnalyser.fftSize = 2048;
+  src.connect(micAnalyser);
+  micBuf = new Float32Array(micAnalyser.fftSize);
+}
+function readPitch(){
+  micAnalyser.getFloatTimeDomainData(micBuf);
+  return autoCorrelate(micBuf, ac().sampleRate);
+}
+
+/* ==========================================================
+   TABS
+   ========================================================== */
+$$("nav button").forEach(b=>b.onclick = ()=>{
+  $$("nav button").forEach(x=>x.classList.remove("active"));
+  $$(".tab").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  $("#tab-"+b.dataset.tab).classList.add("active");
+  if(b.dataset.tab === "stats") renderStats();
+  if(b.dataset.tab === "calendar") renderCalendar();
+});
+
+/* ==========================================================
+   TAB 1 — TUNER & DRONE
+   ========================================================== */
+let tunerOn = false, tunerTimer = null, selectedTarget = null;
+
+function buildStringButtons(){
+  const box = $("#stringBtns");
+  const strings = INSTRUMENTS[db.instrument].strings;
+  box.innerHTML = "";
+  if(!strings.length){
+    box.innerHTML = `<p class="small muted">${t("tuner_nostr") || ""}</p>`;
+    selectedTarget = null;
+    return;
+  }
+  strings.forEach((s,i)=>{
+    const b = document.createElement("button");
+    b.className = "btn" + (i===0 ? " sel" : "");
+    b.textContent = s.n;
+    b.onclick = ()=>{
+      selectedTarget = s.m;
+      $$("#stringBtns .btn").forEach(x=>x.classList.remove("sel"));
+      b.classList.add("sel");
+      $("#droneSel").value = s.m; updateDroneFreq();
+    };
+    box.appendChild(b);
+  });
+  if(selectedTarget === null || !strings.some(s=>s.m===selectedTarget)) selectedTarget = strings[0].m;
+}
+
+function buildDroneOptions(){
+  const sel = $("#droneSel");
+  sel.innerHTML = "";
+  for(let m = 48; m <= 84; m++){
+    const o = document.createElement("option");
+    o.value = m; o.textContent = noteName(m);
+    sel.appendChild(o);
+  }
+  sel.value = INSTRUMENTS[db.instrument].strings[0]?.m || 69;
+}
+
+function refChanged(){
+  refA = +$("#refA").value;
+  $("#refLabel").textContent = refA;
+  updateDroneFreq();
+}
+
+function toggleTuner(){
+  if(tunerOn) return stopTuner();
+  if(!micSupported()){ $("#tunerMsg").textContent = t("sight_no_mic"); return; }
+  ensureMic().then(()=>{
+    tunerOn = true;
+    $("#tunerBtn").textContent = t("tuner_stop");
+    tunerTimer = setInterval(tunerTick, 90);
+  }).catch(()=> alert(t("mic_denied")));
+}
+function stopTuner(){
+  tunerOn = false; clearInterval(tunerTimer);
+  $("#tunerBtn").textContent = t("tuner_start");
+}
+function tunerTick(){
+  const hz = readPitch();
+  if(hz <= 0){ $("#tunerMsg").textContent = t("tuner_nosound"); return; }
+  const m = midiOf(hz);
+  const nearest = Math.round(m);
+  $("#tunerNote").textContent = noteName(nearest);
+  $("#tunerHz").textContent = hz.toFixed(1) + " Hz";
+  const diff = Math.round(((selectedTarget !== null ? m - selectedTarget : m - nearest)) * 100);
+  $("#needlePtr").style.transform = `rotate(${Math.max(-45, Math.min(45, diff*0.45))}deg)`;
+  let msg;
+  if(Math.abs(diff) < 8) msg = t("tuner_ok");
+  else if(diff > 0) msg = t("tuner_high", diff);
+  else msg = t("tuner_low", -diff);
+  $("#tunerMsg").textContent = msg;
+}
+
+// Drone
+let droneOsc = null, droneGain = null;
+function toggleDrone(){
+  if(droneOsc){
+    droneOsc.stop(); droneOsc.disconnect(); droneGain.disconnect();
+    droneOsc = null; $("#droneBtn").textContent = t("drone_on");
+    return;
+  }
+  const c = ac();
+  droneOsc = c.createOscillator();
+  droneOsc.type = "sawtooth";
+  droneOsc.frequency.value = hzOf(+$("#droneSel").value);
+  const f = c.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 1400;
+  droneGain = c.createGain(); droneGain.gain.value = 0.12;
+  droneOsc.connect(f).connect(droneGain).connect(c.destination);
+  droneOsc.start();
+  $("#droneBtn").textContent = t("drone_off");
+}
+function updateDroneFreq(){
+  if(droneOsc) droneOsc.frequency.setValueAtTime(hzOf(+$("#droneSel").value), ac().currentTime);
+}
+
+/* ==========================================================
+   TAB 2 — SHEET MUSIC (MusicXML)
+   ========================================================== */
+let library = JSON.parse(lsGet("pj_lib") || "[]");
+
+function parseMusicXML(text){
+  const doc = new DOMParser().parseFromString(text, "application/xml");
+  if(doc.querySelector("parsererror")) throw new Error(t("sheet_parse_err"));
+  const title = doc.querySelector("work-title, movement-title")?.textContent || t("sheet_untitled");
+  const notes = [];
+  doc.querySelectorAll("note").forEach(n=>{
+    const p = n.querySelector("pitch");
+    if(!p) return;
+    const step = p.querySelector("step").textContent;
+    const oct = +p.querySelector("octave").textContent;
+    const alter = +(p.querySelector("alter")?.textContent || 0);
+    const midi = (oct+1)*12 + ({C:0,D:2,E:4,F:5,G:7,A:9,B:11}[step]) + alter;
+    notes.push({midi, letter: step, oct, alter});
+  });
+  return {title, notes};
+}
+
+function showSheet(sheet){
+  $("#sheetTitle").textContent = sheet.title;
+  const list = sheet.notes.map(n=>{
+    const acc = n.alter>0 ? "♯".repeat(n.alter) : n.alter<0 ? "♭".repeat(-n.alter) : "";
+    return n.letter + acc + n.oct;
+  });
+  $("#sheetNotes").textContent = t("sheet_count", sheet.notes.length) + list.slice(0,120).join(" ") + (list.length>120?" ...":"");
+  const svg = $("#sheetStaff");
+  svg.classList.remove("hidden");
+  drawStaff(svg, sheet.notes.slice(0,8).map(n=>({letter:n.letter, oct:n.oct, acc: n.alter>0?"#":n.alter<0?"b":""})));
+  library.unshift({title: sheet.title, count: sheet.notes.length, date: localISO()});
+  library = library.slice(0,50);
+  lsSet("pj_lib", JSON.stringify(library));
+  renderLibrary();
+}
+function renderLibrary(){
+  const box = $("#libList");
+  box.innerHTML = library.length
+    ? library.map(s=>`<div class="event">${t("sheet_lib_item", s.title, s.count)} <span class="muted">(${s.date})</span></div>`).join("")
+    : `<span class="muted small">${t("sheet_lib_empty")}</span>`;
+}
+
+function importLocalFile(e){
+  const f = e.target.files[0]; if(!f) return;
+  f.text().then(x=>showSheet(parseMusicXML(x))).catch(err=>alert(err.message));
+}
+
+async function importFromDrive(){
+  if(!gAccessToken){
+    if(CONFIG.GOOGLE_CLIENT_ID.startsWith("YOUR") || typeof google === "undefined") return alert(t("need_client"));
+    gTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CONFIG.GOOGLE_CLIENT_ID,
+      scope: "https://www.googleapis.com/auth/drive.readonly",
+      callback: r => { gAccessToken = r.access_token; listDrive(); }
+    });
+    return gTokenClient.requestAccessToken();
+  }
+  listDrive();
+}
+async function listDrive(){
+  const q = encodeURIComponent("(name contains '.musicxml' or name contains '.xml') and trashed=false");
+  const r = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&pageSize=30`,
+    {headers:{Authorization:"Bearer " + gAccessToken}});
+  const data = await r.json();
+  const box = $("#driveList");
+  box.innerHTML = "";
+  if(!data.files?.length){ box.innerHTML = `<p class="small muted">${t("sheet_drive_empty")}</p>`; return; }
+  data.files.forEach(f=>{
+    const b = document.createElement("button");
+    b.className = "btn"; b.textContent = "📄 " + f.name;
+    b.onclick = async ()=>{
+      const x = await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,
+        {headers:{Authorization:"Bearer " + gAccessToken}}).then(res=>res.text());
+      showSheet(parseMusicXML(x));
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ==========================================================
+   STAFF DRAWING (treble clef)
+   Bottom line = E4 (y=120); each diatonic step = 5px up.
+   ========================================================== */
+function staffY(letter, oct){
+  return 120 - ((oct*7 + LI[letter]) - 30) * 5;
+}
+// key signature glyphs placed in standard treble-clef positions
+const SHARP_POS = [["F",5],["C",5],["G",5],["D",5],["A",4],["E",5],["B",4]];
+const FLAT_POS  = [["B",4],["E",5],["A",4],["D",5],["G",4],["C",5],["F",4]];
+
+function drawStaff(svg, notes, hi = -1, keyName = null){
+  svg.innerHTML = "";
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, txt) => {
+    const e = document.createElementNS(NS, tag);
+    for(const k in attrs) e.setAttribute(k, attrs[k]);
+    if(txt !== undefined) e.textContent = txt;
+    svg.appendChild(e); return e;
+  };
+  [80,90,100,110,120].forEach(y=> el("line",{x1:40,x2:310,y1:y,y2:y,stroke:"#333","stroke-width":1.2}));
+  el("text",{x:44,y:122,"font-size":66,fill:"#333"},"𝄞");
+
+  // key signature
+  if(keyName){
+    const n = KEYS[keyName] || 0;
+    const list = n > 0 ? SHARP_POS.slice(0,n) : FLAT_POS.slice(0,-n);
+    const glyph = n > 0 ? "♯" : "♭";
+    list.forEach(([L,o],i)=>{
+      el("text",{x:58 + i*9, y:staffY(L,o)+6, "font-size":18, fill:"#333"}, glyph);
+    });
+  }
+
+  const startX = keyName ? 120 : 110;
+  notes.forEach((n,i)=>{
+    const x = notes.length === 1 ? 200 : startX + i*Math.min(50, 190/(notes.length-1));
+    const y = staffY(n.letter, n.oct);
+    if(y >= 130) for(let yl=130; yl<=y; yl+=10) el("line",{x1:x-12,x2:x+12,y1:yl,y2:yl,stroke:"#333"});
+    if(y <= 70)  for(let yl=70;  yl>=y; yl-=10) el("line",{x1:x-12,x2:x+12,y1:yl,y2:yl,stroke:"#333"});
+    const color = i === hi ? "#e0201b" : "#222";
+    if(n.acc){
+      el("text",{x:x-20,y:y+6,"font-size":18,fill:color}, n.acc==="#"?"♯":n.acc==="b"?"♭":"♮");
+    }
+    el("ellipse",{cx:x,cy:y,rx:7,ry:5,fill:color,transform:`rotate(-20 ${x} ${y})`});
+    if(y >= 100) el("line",{x1:x-6.5,x2:x-6.5,y1:y,y2:y-36,stroke:color,"stroke-width":1.3});
+    else         el("line",{x1:x+6.5,x2:x+6.5,y1:y,y2:y+36,stroke:color,"stroke-width":1.3});
+  });
+}
+
+/* ==========================================================
+   TAB 3 — GAME A: NAME THE NOTE
+   ========================================================== */
+const KEYS = {"C":0,"G":1,"D":2,"A":3,"F":-1,"Bb":-2,"Eb":-3};
+const SHARP_ORDER = ["F","C","G","D","A","E","B"];
+const FLAT_ORDER  = ["B","E","A","D","G","C","F"];
+
+function accFor(keyName, letter){
+  const n = KEYS[keyName];
+  if(n > 0 && SHARP_ORDER.slice(0,n).includes(letter)) return "#";
+  if(n < 0 && FLAT_ORDER.slice(0,-n).includes(letter)) return "b";
+  return "";
+}
+function sigText(keyName){
+  const n = KEYS[keyName];
+  if(n === 0) return t("sig_none");
+  if(n > 0) return t("sig_sharp", n, SHARP_ORDER.slice(0,n).join(" "));
+  return t("sig_flat", -n, FLAT_ORDER.slice(0,-n).join(" "));
+}
+const keyLine = k => t("key_line", k, sigText(k));
+
+let theory = {key:"C", letter:"C", oct:4, acc:"", selL:null, selA:null, score:0, total:0, answered:false};
+
+function buildLetterButtons(){
+  const box = $("#letterBtns"); box.innerHTML = "";
+  "ABCDEFG".split("").forEach(L=>{
+    const b = document.createElement("button");
+    b.className = "btn"; b.textContent = L;
+    b.onclick = ()=>{
+      if(theory.answered) return;
+      theory.selL = L;
+      $$("#letterBtns .btn").forEach(x=>x.classList.toggle("sel", x===b));
+    };
+    box.appendChild(b);
+  });
+}
+buildLetterButtons();
+
+function setAcc(a){
+  if(theory.answered) return;
+  theory.selA = a;
+  $$(".acc-btn").forEach(b => b.classList.toggle("sel", b.dataset.a === a));
+}
+
+function newTheoryQuestion(){
+  const keys = Object.keys(KEYS);
+  theory.key = keys[Math.floor(Math.random()*keys.length)];
+  theory.letter = "ABCDEFG"[Math.floor(Math.random()*7)];
+  theory.oct = Math.random() < 0.5 ? 4 : 5;
+  theory.acc = accFor(theory.key, theory.letter);
+  theory.selL = null; theory.selA = null; theory.answered = false;
+  $$("#letterBtns .btn").forEach(x=>x.classList.remove("sel"));
+  $$(".acc-btn").forEach(x=>x.classList.remove("sel"));
+  $("#theoryFeedback").textContent = "";
+  $("#keyInfo").textContent = keyLine(theory.key);
+  // The key signature is drawn on the staff, so the note itself shows no accidental.
+  drawStaff($("#theoryStaff"), [{letter:theory.letter, oct:theory.oct, acc:""}], -1, theory.key);
+}
+
+function checkTheory(){
+  if(theory.answered) return;
+  const fb = $("#theoryFeedback");
+  if(!theory.selL){ fb.innerHTML = `<span class="muted">${t("theory_pick_letter")}</span>`; return; }
+  if(theory.selA === null){ fb.innerHTML = `<span class="muted">${t("theory_pick_acc")}</span>`; return; }
+  theory.answered = true;
+  theory.total++;
+  const ok = theory.selL === theory.letter && theory.selA === theory.acc;
+  if(ok) theory.score++;
+  const correct = theory.letter + (theory.acc==="#"?"♯":theory.acc==="b"?"♭":"♮");
+  fb.innerHTML = ok ? `<span class="hit">${t("theory_ok")}</span>` : `<span class="miss">${t("theory_wrong", correct)}</span>`;
+  $("#theoryScore").textContent = `${theory.score}/${theory.total}`;
+  db.games.push({date: localISO(), type:"theory", score: ok?1:0, total:1});
+  saveDB();
+}
+function nextTheory(){ newTheoryQuestion(); }
+
+/* ==========================================================
+   TAB 3 — GAME B: SIGHT-READING
+   ========================================================== */
+const SCALE_G = [55,57,59,60,62,64,66,67,69,71,72,74,76]; // G major, G3–E5
+let sr = {melody:[], idx:0, hits:0, total:0, stable:0, wrong:0, noteStart:0, running:false, timer:null};
+
+function makeMelody(len = 6){
+  const out = [];
+  let i = Math.floor(Math.random()*6) + 2;
+  for(let k=0;k<len;k++){
+    out.push(SCALE_G[i]);
+    const step = Math.random() < 0.6 ? (Math.random()<0.5?-1:1) : (Math.random()<0.5?-2:2);
+    i = Math.max(0, Math.min(SCALE_G.length-1, i+step));
+  }
+  return out;
+}
+function drawSightState(){
+  const notes = sr.melody.map(m=>{
+    const pc = PC[((m%12)+12)%12];
+    return {letter:pc[0], acc:pc[1], oct: Math.floor(m/12)-1};
+  });
+  drawStaff($("#sightStaff"), notes, sr.idx);
+}
+
+async function startSight(){
+  if(sr.running) return finishSight(false);
+  const fb = $("#sightFeedback");
+  if(!micSupported()){ fb.innerHTML = `<span class="miss">${t("sight_no_mic")}</span>`; return; }
+  fb.textContent = t("sight_asking");
+  try{
+    await ensureMic();
+  }catch(e){
+    fb.innerHTML = `<span class="miss">${t("mic_denied")}</span>`;
+    return;
+  }
+  sr = {melody:makeMelody(6), idx:0, hits:0, total:6, stable:0, wrong:0,
+        noteStart:Date.now(), running:true, timer:null};
+  $("#sightBtn").textContent = t("sight_stop");
+  $("#sightScore").textContent = "—";
+  fb.textContent = t("sight_go");
+  drawSightState();
+  sr.timer = setInterval(sightTick, 80);
+}
+
+function sightTick(){
+  if(!sr.running) return;
+  const fb = $("#sightFeedback");
+  if(Date.now() - sr.noteStart > 9000){
+    fb.innerHTML = `<span class="miss">${t("sight_timeout")}</span>`;
+    return advanceSight(false);
+  }
+  const hz = readPitch();
+  if(hz <= 0){ sr.stable = 0; return; }
+  const m = midiOf(hz);
+  const near = Math.round(m);
+  const target = sr.melody[sr.idx];
+  const centsOff = Math.abs(m - near) * 100;
+  if(near === target && centsOff < 35){
+    sr.stable++; sr.wrong = 0;
+    if(sr.stable >= 4){
+      fb.innerHTML = `<span class="hit">${t("sight_ok")}</span>`;
+      advanceSight(true);
+    }
+  } else {
+    sr.stable = 0;
+    if(near !== target && centsOff < 35 && near >= 50 && near <= 90){
+      sr.wrong++;
+      if(sr.wrong >= 5){
+        fb.innerHTML = `<span class="miss">${t("sight_wrong", noteName(near), noteName(target))}</span>`;
+        sr.wrong = 0;
+      }
+    }
+  }
+}
+
+function advanceSight(hit){
+  if(hit) sr.hits++;
+  sr.idx++; sr.stable = 0; sr.wrong = 0;
+  sr.noteStart = Date.now();
+  if(sr.idx >= sr.melody.length) return finishSight(true);
+  drawSightState();
+}
+
+function finishSight(completed){
+  clearInterval(sr.timer);
+  const wasRunning = sr.running;
+  sr.running = false;
+  $("#sightBtn").textContent = sr.total ? t("sight_restart") : t("sight_start");
+  if(!wasRunning) return;
+  if(completed){
+    $("#sightScore").textContent = t("sight_result", sr.hits, sr.total);
+    $("#sightFeedback").innerHTML = sr.hits === sr.total
+      ? `<span class="hit">${t("sight_all")}</span>`
+      : `<span class="miss">${t("sight_partial", sr.hits, sr.total)}</span>`;
+    db.games.push({date: localISO(), type:"sight", score: sr.hits, total: sr.total});
+    saveDB();
+    renderStats();
+  } else {
+    $("#sightFeedback").textContent = "";
+  }
+}
+
+function showGame(g){
+  $("#game-theory").classList.toggle("hidden", g!=="theory");
+  $("#game-sight").classList.toggle("hidden", g!=="sight");
+  $("#gameTheoryBtn").classList.toggle("sel", g==="theory");
+  $("#gameSightBtn").classList.toggle("sel", g==="sight");
+  if(g!=="sight" && sr.running) finishSight(false);
+}
+
+/* ==========================================================
+   TAB 4 — CALENDAR
+   ========================================================== */
+let calCursor = new Date(); let selDay = localISO();
+function setupCalendar(){ $("#evDate").value = localISO(); renderCalendar(); }
+function moveMonth(d){ calCursor.setMonth(calCursor.getMonth()+d); renderCalendar(); }
+
+function renderCalendar(){
+  if(!db) return;
+  const y = calCursor.getFullYear(), m = calCursor.getMonth();
+  $("#calTitle").textContent = calCursor.toLocaleDateString(lang==="th"?"th-TH":"en-US",{year:"numeric",month:"long"});
+  const grid = $("#calGrid"); grid.innerHTML = "";
+  const heads = lang==="th" ? ["อา","จ","อ","พ","พฤ","ศ","ส"] : ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  heads.forEach(d=>{ const h = document.createElement("div"); h.className="head"; h.textContent=d; grid.appendChild(h); });
+  const first = new Date(y,m,1).getDay();
+  const days = new Date(y,m+1,0).getDate();
+  for(let i=0;i<first;i++){ const b=document.createElement("div"); b.className="blank"; grid.appendChild(b); }
+  const today = localISO();
+  for(let d=1; d<=days; d++){
+    const iso = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const cell = document.createElement("div");
+    cell.textContent = d;
+    if(iso === today) cell.classList.add("today");
+    if(iso === selDay) cell.style.outline = "2px solid var(--accent)";
+    db.events.filter(e=>e.date===iso).forEach(()=>{
+      const dot = document.createElement("span"); dot.className="dot"; cell.appendChild(dot);
+    });
+    cell.onclick = ()=>{ selDay = iso; renderCalendar(); };
+    grid.appendChild(cell);
+  }
+  showDayEvents();
+}
+function showDayEvents(){
+  $("#selDayLabel").textContent = selDay;
+  const list = db.events.filter(e=>e.date===selDay).sort((a,b)=>a.time.localeCompare(b.time));
+  $("#dayEvents").innerHTML = list.length
+    ? list.map(e=>`<div class="event"><strong>${e.time} — ${e.title}</strong><br><span class="small muted">${t("type_"+e.type)}</span>
+        <button class="btn small" style="float:right" onclick="deleteEvent('${e.id}')">${t("cal_delete")}</button></div>`).join("")
+    : `<span class="muted">${t("cal_none")}</span>`;
+}
+function addEvent(){
+  const title = $("#evTitle").value.trim();
+  const date = $("#evDate").value, time = $("#evTime").value;
+  if(!title || !date || !time) return alert(t("cal_need"));
+  db.events.push({id: Date.now().toString(36), title, type: $("#evType").value, date, time});
+  saveDB(); $("#evTitle").value = "";
+  selDay = date; calCursor = new Date(date + "T00:00:00");
+  renderCalendar();
+}
+function deleteEvent(id){
+  db.events = db.events.filter(e=>e.id!==id); saveDB(); renderCalendar();
+}
+
+/* ==========================================================
+   TAB 5 — STATS
+   ========================================================== */
+function addSession(){
+  const minutes = +$("#sMin").value;
+  if(!minutes || minutes < 1) return alert(t("stats_need_min"));
+  db.sessions.push({
+    date: $("#sDate").value || localISO(),
+    minutes,
+    focus: $("#sFocus").value,
+    rating: +$("#sRate").value,
+    note: $("#sNote").value.trim()
+  });
+  saveDB(); $("#sNote").value = "";
+  renderStats();
+}
+
+function trackUsage(){
+  if(document.hidden || !user || !db) return;
+  const d = localISO();
+  db.usage[d] = (db.usage[d] || 0) + 15;
+  saveDB();
+}
+
+function lastDays(n=7){
+  const out = [];
+  for(let i=n-1;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    out.push(localISO(d));
+  }
+  return out;
+}
+
+function renderStats(){
+  if(!db) return;
+  const days = lastDays(7);
+  const practice = days.map(d => db.sessions.filter(s=>s.date===d).reduce((a,s)=>a+s.minutes,0));
+  const usage = days.map(d => Math.round((db.usage[d]||0)/60));
+  drawDailyChart(days, practice, usage);
+  drawFocusChart(days);
+  renderGameStats(days);
+  $("#localInsight").innerHTML = buildLocalInsight(days);
+}
+
+function drawDailyChart(days, practice, usage){
+  const svg = $("#chartDaily");
+  const W=640,H=260,pad=40,base=H-30;
+  const max = Math.max(60, ...practice, ...usage);
+  const bw = (W-pad*2)/days.length;
+  let g = "";
+  for(let k=0;k<=4;k++){
+    const y = base - (base-20)*k/4;
+    g += `<line x1="${pad}" x2="${W-10}" y1="${y}" y2="${y}" stroke="#ddd6c6"/>`;
+    g += `<text x="${pad-6}" y="${y+4}" font-size="11" text-anchor="end" fill="#666">${Math.round(max*k/4)}</text>`;
+  }
+  days.forEach((d,i)=>{
+    const x = pad + i*bw + bw*0.15;
+    const h1 = (practice[i]/max)*(base-20);
+    const h2 = (usage[i]/max)*(base-20);
+    g += `<rect x="${x}" y="${base-h1}" width="${bw*0.32}" height="${h1}" fill="#e0201b" rx="3"><title>${practice[i]}</title></rect>`;
+    g += `<rect x="${x+bw*0.36}" y="${base-h2}" width="${bw*0.32}" height="${h2}" fill="#c9a66b" rx="3"><title>${usage[i]}</title></rect>`;
+    g += `<text x="${pad+i*bw+bw/2}" y="${H-8}" font-size="11" text-anchor="middle" fill="#444">${d.slice(5)}</text>`;
+  });
+  svg.innerHTML = g;
+}
+
+function drawFocusChart(days){
+  const svg = $("#chartFocus");
+  const sess = db.sessions.filter(s=>days.includes(s.date));
+  const map = {};
+  sess.forEach(s=>{
+    (map[s.focus] ||= {sum:0,n:0,min:0});
+    map[s.focus].sum += s.rating; map[s.focus].n++; map[s.focus].min += s.minutes;
+  });
+  const rows = Object.entries(map).map(([k,v])=>({k, avg: v.sum/v.n, min: v.min})).sort((a,b)=>a.avg-b.avg);
+  if(!rows.length){ svg.innerHTML = `<text x="20" y="40" font-size="14" fill="#555">${t("stats_no_focus")}</text>`; return; }
+  let g = ""; const bh = Math.min(34, 200/rows.length);
+  rows.forEach((r,i)=>{
+    const y = 20 + i*(bh+10);
+    const w = (r.avg/5)*340;
+    const color = r.avg < 3 ? "#e0201b" : r.avg < 4 ? "#c9a66b" : "#3c8a5a";
+    g += `<text x="0" y="${y+bh*0.7}" font-size="13" fill="#222">${t("focus_"+r.k)}</text>`;
+    g += `<rect x="230" y="${y}" width="${w}" height="${bh}" fill="${color}" rx="6"/>`;
+    g += `<text x="${236+w}" y="${y+bh*0.7}" font-size="12" fill="#222">${r.avg.toFixed(1)} · ${r.min}</text>`;
+  });
+  svg.innerHTML = g;
+}
+
+function buildLocalInsight(days){
+  const sess = db.sessions.filter(s=>days.includes(s.date));
+  if(!sess.length) return `<span class="muted">${t("insight_empty")}</span>`;
+  const weak = [...sess].sort((a,b)=>a.rating-b.rating)[0];
+  const total = sess.reduce((a,s)=>a+s.minutes,0);
+  return t("insight_text", total, t("focus_"+weak.focus)) + (weak.note ? t("insight_note", weak.note) : "");
+}
+
+function renderGameStats(days){
+  const g = db.games.filter(x=>days.includes(x.date));
+  const box = $("#gameStats");
+  if(!g.length){ box.textContent = t("game_none"); return; }
+  const pct = arr => {
+    const tot = arr.reduce((a,x)=>a+x.total,0);
+    return tot ? Math.round(arr.reduce((a,x)=>a+x.score,0)/tot*100) : null;
+  };
+  const th = g.filter(x=>x.type==="theory"), sg = g.filter(x=>x.type==="sight");
+  const thTxt = th.length ? `${pct(th)}% (${th.length} ${t("unit_items")})` : "—";
+  const sgTxt = sg.length ? `${pct(sg)}% (${sg.length} ${t("unit_runs")})` : "—";
+  box.innerHTML = `${t("game_theory_lbl")}: ${thTxt} &nbsp;|&nbsp; ${t("game_sight_lbl")}: ${sgTxt}`;
+}
+
+/* ---------- AI analysis ---------- */
+async function aiAnalyze(){
+  const out = $("#aiOut");
+  const days = lastDays(7);
+  const summary = {
+    instrument: t(INSTRUMENTS[db.instrument].key),
+    sessions: db.sessions.filter(s=>days.includes(s.date)),
+    usageMinutesPerDay: days.map(d=>Math.round((db.usage[d]||0)/60)),
+    games: db.games.filter(g=>days.includes(g.date))
+  };
+  if(!CONFIG.ANTHROPIC_API_KEY){
+    out.textContent = t("ai_nokey") + JSON.stringify(summary, null, 2);
+    return;
+  }
+  out.textContent = t("ai_loading");
+  try{
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-api-key": CONFIG.ANTHROPIC_API_KEY,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
+      body: JSON.stringify({
+        model: CONFIG.AI_MODEL, max_tokens: 1000,
+        messages:[{role:"user", content: t("ai_prompt") + JSON.stringify(summary)}]
+      })
+    });
+    const data = await r.json();
+    out.textContent = data.content.map(c=>c.text||"").join("\n") || "—";
+  }catch(e){
+    out.textContent = t("ai_err", e.message);
+  }
+}
+
+/* ==========================================================
+   BOOT
+   ========================================================== */
+document.documentElement.lang = lang;
+applyLang();
+window.addEventListener("load", ()=>{
+  const sess = JSON.parse(lsGet("pj_session") || "null");
+  if(sess){ user = sess; startApp(); }
+});
+</script>
+</body>
+</html>
